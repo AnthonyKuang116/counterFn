@@ -48,11 +48,11 @@ function counterReducer(state = { value: 100 }, action) {
 
 export let mystore = mycreateStore(counterReducer);
 
-mystore.dispatch({ type: 'counter/incremented' });
-mystore.dispatch({ type: 'counter/incremented' });
-const unsubscribe = mystore.subscribe(() => {console.log(mystore.getState())});
-mystore.dispatch({ type: 'counter/decremented' });
-unsubscribe()
+// mystore.dispatch({ type: 'counter/incremented' });
+// mystore.dispatch({ type: 'counter/incremented' });
+// const unsubscribe = mystore.subscribe(() => {console.log(mystore.getState())});
+// mystore.dispatch({ type: 'counter/decremented' });
+// unsubscribe()
 
 function mycreateStore(reducer) {
   let subscriberFnList = [];
@@ -73,9 +73,17 @@ function mycreateStore(reducer) {
     subscriberFnList.push(subscriberFn);
   }
 
+  function unsubscribe() {
+    if(subscriberFnList.length !== 0){
+      subscriberFnList.pop();
+    }
+    return;
+  }
+
   return {
     subscribe,
     dispatch,
     getState,
+    unsubscribe
   };
 }
