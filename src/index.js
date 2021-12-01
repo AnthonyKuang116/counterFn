@@ -1,10 +1,44 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 // import './index.css';
-// import App from './App';
-import StockApp from './components/StockApp/StockApp';
+import App from './App';
+// import StockApp from './components/StockApp/StockApp';
+import { MyProvider } from './MyReactRedux/MyReactRedux'
+import { mycreateStore } from './MyRedux/MyRedux'
 
-ReactDOM.render(<StockApp />, document.getElementById('root'));
+// import { Provider } from 'react-redux';
+
+const COUNTER_ADD = "COUNTER_ADD";
+const COUNTER_SUB = "COUNTER_SUB";
+
+const actionType = {
+    COUNTER_ADD,
+    COUNTER_SUB
+}
+
+const reducer = (state = { value: 50 }, action) => {
+    switch (action.type) {
+        case actionType.COUNTER_ADD:
+            return {
+                ...state,
+                value: state.value + 1
+            }
+        case actionType.COUNTER_SUB:
+            return {
+                ...state,
+                value: state.value - 1
+            }
+        default:
+            return state
+    }
+}
+
+const store = mycreateStore(reducer)
+
+ReactDOM.render(
+    <MyProvider store={store}>
+        {<App />}
+    </MyProvider>, document.getElementById('root'));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

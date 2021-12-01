@@ -54,7 +54,7 @@ export let mystore = mycreateStore(counterReducer);
 // mystore.dispatch({ type: 'counter/decremented' });
 // unsubscribe()
 
-function mycreateStore(reducer) {
+export function mycreateStore(reducer) {
   let subscriberFnList = [];
   let state;
   state = reducer(state, { type: '_______INIT_______' });

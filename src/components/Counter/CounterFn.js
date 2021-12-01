@@ -62,6 +62,9 @@ import React from 'react';
 import Button from '../Button/Button';
 import { mystore } from '../../MyRedux/MyRedux';
 import { useForceUpdate } from '../../hooks/useForceUpdate';
+import {withSubscribe} from '../hoc/withSubscribe';
+import { myconnect } from '../../MyReactRedux/MyReactRedux';
+import { connect } from 'react-redux';
 
 let data = {
   counter: 1000,
@@ -97,7 +100,9 @@ class Counter extends React.Component {
       <section>
         {this.props.children}
         <header>
-          {this.state.title}:{mystore.getState().value}
+          {/* {this.state.title}:{mystore.getState().value} */}
+          {this.state.title}:{this.props.counterValue}
+
         </header>
 
         {!this.state.hideBtnAdd ? (
@@ -105,7 +110,8 @@ class Counter extends React.Component {
             className="btn"
             onClick={() => {
               //HW1  why
-              mystore.dispatch({ type: 'counter/incremented' });
+              // mystore.dispatch({ type: 'counter/incremented' });
+              this.props.handleAdd();
             }}
           >
             Add
@@ -114,7 +120,8 @@ class Counter extends React.Component {
         <Button
           className="btn"
           onClick={() => {
-            mystore.dispatch({ type: 'counter/decremented' });
+            // mystore.dispatch({ type: 'counter/decremented' });
+            this.props.handleSub();
           }}
         >
           Sub
@@ -129,9 +136,10 @@ class Counter extends React.Component {
         </Button>
         <Button
           onClick={() => {
-            let currentCouter = this.state.counter;
+            // let currentCouter = this.state.counter;
+            let currentCounter = this.props.counterValue;
             setTimeout(() => {
-              alert(currentCouter); // HW2 alert the recent value using function component
+              alert(currentCounter); // HW2 alert the recent value using function component
             }, 5000);
           }}
         >
@@ -220,4 +228,19 @@ export const CounterFn = (props) => {
   );
 };
 
-export default Counter;
+const mapStateToProps = (state) => {
+  return {
+    counterValue: state.value,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    hanldeAdd: () => dispatch({ type: 'COUNTER_ADD' }),
+    hanldeSub: () => alert('test'),
+  };
+};
+
+export default myconnect(mapStateToProps, mapDispatchToProps)(Counter);
+
+// export default withSubscribe(Counter);
